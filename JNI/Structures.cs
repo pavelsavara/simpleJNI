@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace simpleJNI.JNI
 {
 
-    public enum JNIResult
+    internal enum JNIResult
     {
         JNI_OK = 0, /* success */
         JNI_ERR = (-1), /* unknown error */
@@ -22,7 +17,7 @@ namespace simpleJNI.JNI
     }
 
     [StructLayout(LayoutKind.Sequential), NativeCppClass]
-    public unsafe struct JavaVMInitArgsNative
+    internal unsafe struct JavaVMInitArgsNative
     {
         public int version;
         public int nOptions;
@@ -31,31 +26,28 @@ namespace simpleJNI.JNI
     }
 
     [StructLayout(LayoutKind.Sequential), NativeCppClass]
-    public struct JavaVMOptionNative
+    internal struct JavaVMOptionNative
     {
         public IntPtr optionString; //char*
         public IntPtr extraInfo; //void*
     }
 
-    [Serializable]
-    public class JNIException : Exception
+    [StructLayout(LayoutKind.Sequential), NativeCppClass]
+    internal struct JniLocalHandle
     {
-        protected JNIException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
-
-        public JNIException()
-        {
-        }
-
-        public JNIException(string message)
-            : base(message)
-        {
-        }
-
-        public JNIException(string message, Exception ex)
-            : base(message, ex)
-        {
-        }
+        public IntPtr handle;
     }
+
+    [StructLayout(LayoutKind.Sequential), NativeCppClass]
+    internal struct JniGlobalHandle
+    {
+        public IntPtr handle;
+    }
+
+    [StructLayout(LayoutKind.Sequential), NativeCppClass]
+    internal struct JniThrowable
+    {
+        public IntPtr handle;
+    }
+
 }

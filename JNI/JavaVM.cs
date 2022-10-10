@@ -8,16 +8,48 @@ namespace simpleJNI.JNI
 {
     public unsafe partial class JavaVM
     {
-        private const string JAVA_HOME_ENV = "JAVA_HOME";
-        private static string? JavaHome = null;
         private static bool init;
 
+        private readonly JavaVMFunctions* functions;
         private readonly JavaVMNative* native;
-        internal JavaVM(JavaVMNative* native)
+        private readonly JNIEnv env;
+        internal JavaVM(JavaVMNative* native, JNIEnv env)
         {
             this.native = native;
+            this.functions = (*native).functions;
+            this.env = env;
             //functions = *(*(JavaPtr*)native.ToPointer()).functions;
         }
+
+        public void Destroy()
+        {
+            this.env.ExceptionDescribe();
+            this.env.ExceptionOccurred();
+            this.env.ExceptionClear();
+            var res = (*functions).DestroyJavaVM(native);
+            ThrowOnError(res);
+        }
+
+        private static void ThrowOnError(JNIResult result)
+        {
+            if (result != JNIResult.JNI_OK)
+            {
+                throw new Exception("JNI failed: " + result);
+            }
+        }
+        private void ThrowOnException(JNIResult result)
+        {
+            /*
+            JniLocalHandle occurred = this.env.ExceptionOccurred();
+            if (!JniLocalHandle.IsNull(occurred))
+            {
+                //ExceptionDescribe();
+                ExceptionClear();
+                Exception exception = Convertor.FullJ2C<Exception>(this, occurred);
+                throw exception;
+            }*/
+        }
+
 
         private static void Init()
         {
@@ -35,7 +67,7 @@ namespace simpleJNI.JNI
                 catch (BadImageFormatException ex)
                 {
                     // it didn't help, throw original exception
-                    throw new JNIException("Can't initialize JNI", ex);
+                    throw new Exception("Can't initialize JNI", ex);
                 }
             }
         }
@@ -65,23 +97,29 @@ namespace simpleJNI.JNI
             result = Dll.JNI_CreateJavaVM(out var jvmNative, out var jniEnvNative, &args);
             if (result != JNIResult.JNI_OK)
             {
-                throw new JNIException("Can't load JVM (already have one ?) " + result);
+                throw new Exception("Can't load JVM" + result);
             }
-            jvm = new JavaVM(jvmNative);
             env = new JNIEnv(jniEnvNative);
+            jvm = new JavaVM(jvmNative, env);
+        }
+
+        [StructLayout(LayoutKind.Sequential, Size = 4), NativeCppClass]
+        internal struct JavaVMNative
+        {
+            public JavaVMFunctions* functions;
         }
 
         [StructLayout(LayoutKind.Sequential), NativeCppClass]
-        internal struct JavaVMNative
+        internal struct JavaVMFunctions
         {
             public IntPtr reserved0;
             public IntPtr reserved1;
             public IntPtr reserved2;
-            public delegate* unmanaged<JNIResult, JavaVMNative*> DestroyJavaVM;
-            public delegate* unmanaged<JNIResult, JavaVMNative*, JNIEnvNative**, JavaVMInitArgsNative*> AttachCurrentThread;
-            public delegate* unmanaged<JNIResult, JavaVMNative*> DetachCurrentThread;
-            public delegate* unmanaged<JNIResult, JavaVMNative*, JNIEnvNative**, int> GetEnv;
-            public delegate* unmanaged<JNIResult, JavaVMNative*, JNIEnvNative**, JavaVMInitArgsNative*> AttachCurrentThreadAsDaemon;
+            public delegate* unmanaged<JavaVMNative*, JNIResult> DestroyJavaVM;
+            public delegate* unmanaged<JavaVMNative*, JNIEnvNative**, JavaVMInitArgsNative*, JNIResult> AttachCurrentThread;
+            public delegate* unmanaged<JavaVMNative*, JNIResult> DetachCurrentThread;
+            public delegate* unmanaged<JavaVMNative*, JNIEnvNative**, int, JNIResult> GetEnv;
+            public delegate* unmanaged<JavaVMNative*, JNIEnvNative**, JavaVMInitArgsNative*, JNIResult> AttachCurrentThreadAsDaemon;
         }
 
         internal unsafe static partial class Dll

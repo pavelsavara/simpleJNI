@@ -8,6 +8,7 @@ public unsafe class Program
     {
         JavaVM.CreateJavaVM(out var jvm, out var env);
         Console.WriteLine("Hello, World!");
+        jvm.Destroy();
     }
 }
 

@@ -6,30 +6,40 @@ namespace simpleJNI.JNI
     public unsafe partial class JNIEnv
     {
         JNIEnvNative* native = null;
-        JNIEnvFunctions* functions = null;
+        JNIEnvFunctions functions;
         internal JNIEnv(JNIEnvNative* native)
         {
             this.native = native;
-            this.functions = (*native).functions;
+            // copy functions
+            functions = *(*native).functions;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void ExceptionOccurred()
         {
-            var throwable = (*functions).ExceptionOccurred(native);
+            var throwable = functions.ExceptionOccurred(native);
             if (throwable.handle != IntPtr.Zero)
             {
                 throw new Exception("TODO");
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void ExceptionDescribe()
         {
-            (*functions).ExceptionDescribe(native);
+            functions.ExceptionDescribe(native);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public int GetVersion()
+        {
+            return functions.GetVersion(native);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void ExceptionClear()
         {
-            (*functions).ExceptionClear(native);
+            functions.ExceptionClear(native);
         }
 
         [StructLayout(LayoutKind.Sequential, Size = 4), NativeCppClass]

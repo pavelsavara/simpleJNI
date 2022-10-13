@@ -7,7 +7,7 @@ public unsafe class Program
     public static void Main()
     {
         JavaVM.CreateJavaVM(out var jvm, out var env);
-        Console.WriteLine("Hello, World!");
+        Console.WriteLine($"Hello, JNI 0x{env.GetVersion(),0:x}");
         jvm.Destroy();
     }
 }

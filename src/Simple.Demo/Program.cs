@@ -2,7 +2,6 @@
 
 using (var jvm = new JavaVM())
 {
-    var jniVersion = jvm.Env.GetVersion();
-
-    Console.WriteLine($"Hello, JNI 0x{jniVersion,0:x}");
+    Console.WriteLine($"Hello, JNI 0x{jvm.Env.GetVersion(),0:x}");
+    Console.WriteLine($"Time in Java is {java.lang.System.currentTimeMillis()}");
 }

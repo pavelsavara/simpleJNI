@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.32916.344
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "simpleJNI", "simpleJNI.csproj", "{6B44BD61-5A10-4085-B463-A984A2CC09A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simple.JNI", "src\Simple.JNI\Simple.JNI.csproj", "{6B44BD61-5A10-4085-B463-A984A2CC09A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simple.demo", "src\Simple.Demo\Simple.Demo.csproj", "{19B677DD-5AB3-4041-8C19-85FAC7EC98EF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{6B44BD61-5A10-4085-B463-A984A2CC09A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B44BD61-5A10-4085-B463-A984A2CC09A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B44BD61-5A10-4085-B463-A984A2CC09A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19B677DD-5AB3-4041-8C19-85FAC7EC98EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19B677DD-5AB3-4041-8C19-85FAC7EC98EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19B677DD-5AB3-4041-8C19-85FAC7EC98EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19B677DD-5AB3-4041-8C19-85FAC7EC98EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

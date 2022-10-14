@@ -1,9 +1,17 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<!--
 		<TargetFramework>net7.0</TargetFramework>
+		-->
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
+		<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+		<IsRoslynComponent>true</IsRoslynComponent>
+		<AnalyzerLanguage>cs</AnalyzerLanguage>
+		<LangVersion>preview</LangVersion>
+		<IncludeBuildOutput>false</IncludeBuildOutput>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -11,6 +19,23 @@
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.4.0-2.final" PrivateAssets="all" />
 
 		<None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+		<Compile Update="Resources\SR.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>SR.resx</DependentUpon>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Update="Resources\SR.resx">
+			<Generator>ResXFileCodeGenerator</Generator>
+			<LastGenOutput>SR.Designer.cs</LastGenOutput>
+			<CustomToolNamespace>Simple.CodeGen</CustomToolNamespace>
+		</EmbeddedResource>
 	</ItemGroup>
 
 </Project>

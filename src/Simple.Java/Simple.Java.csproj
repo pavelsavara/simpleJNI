@@ -4,6 +4,8 @@
 		<TargetFramework>net7.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -11,6 +13,9 @@
 		<ProjectReference Include="..\Simple.CodeGen\Simple.CodeGen.csproj"				  
 						  ReferenceOutputAssembly="false"				  
 						  OutputItemType="Analyzer" />
+
+		<None Include="obj\Debug\net7.0\generated\Simple.CodeGen\Simple.CodeGen.JavaImportGenerator\JavaImports.g.cs" Link="generated\JavaImports.g.cs" />
+		
 	</ItemGroup>
 
 </Project>

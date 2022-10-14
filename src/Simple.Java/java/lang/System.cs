@@ -1,13 +1,11 @@
 ﻿
 using Simple.Java;
 
-namespace java.lang;
-
-public partial class System
+namespace java.lang
 {
-    [JavaImport]
-    public static long currentTimeMillis()
+    public partial class System
     {
-        return 0;
+        [JavaImport]
+        public static partial long currentTimeMillis();
     }
 }

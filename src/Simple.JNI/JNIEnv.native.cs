@@ -20,7 +20,7 @@ public unsafe partial class JNIEnv
         IntPtr reserved3;
         public delegate* unmanaged<JNIEnvNative*, int> GetVersion;
         public IntPtr DefineClass;
-        public delegate* unmanaged<JNIEnvNative*,in byte*, JniClass> FindClass;
+        public delegate* unmanaged[Stdcall]<JNIEnvNative*,void*, JniClass> FindClass;
         public IntPtr FromReflectedMethod;
         public IntPtr FromReflectedField;
         public IntPtr ToReflectedMethod;
@@ -47,7 +47,7 @@ public unsafe partial class JNIEnv
         public IntPtr NewObject;
         public IntPtr GetObjectClass;
         public IntPtr IsInstanceOf;
-        public delegate* unmanaged<JNIEnvNative*, JniClass,in string,in string, JniMethod> GetMethodID;
+        public delegate* unmanaged[Stdcall]<JNIEnvNative*, JniClass, void*, void*, JniMethod> GetMethodID;
         public IntPtr __CallObjectMethod;
         public IntPtr __CallObjectMethodV;
         public IntPtr CallObjectMethod;
@@ -127,7 +127,7 @@ public unsafe partial class JNIEnv
         public IntPtr SetLongField;
         public IntPtr SetFloatField;
         public IntPtr SetDoubleField;
-        public IntPtr GetStaticMethodID;
+        public delegate* unmanaged[Stdcall]<JNIEnvNative*, JniClass, void*, void*, JniMethod> GetStaticMethodID;
         public IntPtr __CallStaticObjectMethod;
         public IntPtr __CallStaticObjectMethodV;
         public IntPtr CallStaticObjectMethod;

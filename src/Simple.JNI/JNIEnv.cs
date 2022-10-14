@@ -40,6 +40,7 @@ public unsafe partial class JNIEnv
         if (th.handle != IntPtr.Zero)
         {
             ExceptionDescribe();
+            ExceptionClear();
             throw new Exception("TODO map java exception");
         }
     }

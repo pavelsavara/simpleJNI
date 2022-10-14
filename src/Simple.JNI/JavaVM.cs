@@ -66,7 +66,8 @@ public unsafe sealed partial class JavaVM : IDisposable
     private static string FindJvmDir()
     {
         // TODO search more locations
-        return @"c:\Program Files\Java\jdk1.8.0_341\jre\bin\server\";
+        //return @"c:\Program Files\Java\jdk1.8.0_341\jre\bin\server\";
+        return @"c:\Program Files\Java\jdk-19\bin\server";
     }
 
     private static void AddEnvironmentPath(string jvm)

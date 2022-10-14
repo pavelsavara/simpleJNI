@@ -33,16 +33,35 @@ public unsafe sealed partial class JNIEnv
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public JniClass FindClass(string className)
     {
-        byte* bytes = stackalloc byte[50];
-        int len =Encoding.UTF8.GetBytes(className, new Span<byte>(bytes, 50));
-        bytes[len] = 0;
-        return functions.FindClass(native, bytes);
+        byte* asciiName = stackalloc byte[250];
+        asciiName[Encoding.ASCII.GetBytes(className, new Span<byte>(asciiName, 250))] = 0;
+        var res = functions.FindClass(native, asciiName);
+        CheckException();
+        return res;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public JniMethod GetMethodID(JniClass clazz, string name, string sig)
     {
-        return functions.GetMethodID(native, clazz, name, sig);
+        byte* asciiName = stackalloc byte[250];
+        asciiName[Encoding.ASCII.GetBytes(name, new Span<byte>(asciiName, 250))] = 0;
+        byte* asciiSig = stackalloc byte[50];
+        asciiSig[Encoding.ASCII.GetBytes(sig, new Span<byte>(asciiSig, 50))] = 0;
+        var res = functions.GetMethodID(native, clazz, asciiName, asciiSig);
+        CheckException();
+        return res;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public JniMethod GetStaticMethodID(JniClass clazz, string name, string sig)
+    {
+        byte* asciiName = stackalloc byte[250];
+        asciiName[Encoding.ASCII.GetBytes(name, new Span<byte>(asciiName, 250))] = 0;
+        byte* asciiSig = stackalloc byte[50];
+        asciiSig[Encoding.ASCII.GetBytes(sig, new Span<byte>(asciiSig, 50))] = 0;
+        var res = functions.GetStaticMethodID(native, clazz, asciiName, asciiSig);
+        CheckException();
+        return res;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

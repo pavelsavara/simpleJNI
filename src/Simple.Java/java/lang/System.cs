@@ -22,11 +22,10 @@ namespace java.lang
             }
             if (j4n_currentTimeMillis.IsDefault)
             {
-                j4n_currentTimeMillis = env.GetMethodID(staticClass, "currentTimeMillis", "()J");
+                j4n_currentTimeMillis = env.GetStaticMethodID(staticClass, "currentTimeMillis", "()J");
             }
 
-            env.CallStaticLongMethod(staticClass, j4n_currentTimeMillis, Span<JniValue>.Empty);
-            return 0;
+            return env.CallStaticLongMethod(staticClass, j4n_currentTimeMillis, Span<JniValue>.Empty);
         }
     }
 }

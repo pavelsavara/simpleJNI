@@ -1,4 +1,7 @@
-﻿namespace Simple.JNI;
+﻿using System.Runtime.CompilerServices;
+using static Simple.JNI.JNIEnv;
+
+namespace Simple.JNI;
 
 public unsafe partial class JavaVM
 {
@@ -15,8 +18,21 @@ public unsafe partial class JavaVM
     {
         var res = functions.DestroyJavaVM(native);
         ThrowOnError(res);
+        if (instance == this)
+        {
+            instance = null;
+        }
     }
 
+    internal JNIEnv AttachCurrentThread()
+    {
+        JNIEnvNative* envPtr;
+        // TODO test me on new thread
+        functions.AttachCurrentThread(native, &envPtr, null);
+        return new JNIEnv(envPtr, this);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static void ThrowOnError(JNIResult result)
     {
         if (result != JNIResult.JNI_OK)

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Simple.Demo": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

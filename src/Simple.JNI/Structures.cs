@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace Simple.JNI;
@@ -33,17 +34,102 @@ internal struct JavaVMOptionNative
 [StructLayout(LayoutKind.Sequential), NativeCppClass]
 internal struct JniLocalHandle
 {
-    public IntPtr handle;
+    internal IntPtr handle;
 }
 
 [StructLayout(LayoutKind.Sequential), NativeCppClass]
 internal struct JniGlobalHandle
 {
-    public IntPtr handle;
+    internal IntPtr handle;
 }
 
 [StructLayout(LayoutKind.Sequential), NativeCppClass]
-internal struct JniThrowable
+public struct JniMethod
 {
-    public IntPtr handle;
+    public bool IsDefault
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get
+        {
+            return handle == default;
+        }
+    }
+
+    internal IntPtr handle;
+}
+
+[StructLayout(LayoutKind.Sequential), NativeCppClass]
+public struct JniClass
+{
+    public bool IsDefault
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get
+        {
+            return handle == default;
+        }
+    }
+
+    internal IntPtr handle;
+}
+
+[StructLayout(LayoutKind.Sequential), NativeCppClass]
+public struct JniObject
+{
+    public bool IsDefault
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get
+        {
+            return handle == default;
+        }
+    }
+
+    internal IntPtr handle;
+}
+
+[StructLayout(LayoutKind.Sequential), NativeCppClass]
+public struct JniThrowable
+{
+    public bool IsDefault
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get
+        {
+            return handle == default;
+        }
+    }
+
+    internal IntPtr handle;
+}
+
+[StructLayout(LayoutKind.Explicit, Size = 8), NativeCppClass]
+public struct JniValue
+{
+    public static JniValue Null
+    {
+        get { return new JniValue(); }
+    }
+
+
+    public bool IsDefault
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get
+        {
+            return _double == default;
+        }
+    }
+
+    [FieldOffset(0)] public byte _bool;
+    [FieldOffset(0)] public byte _byte;
+    [FieldOffset(0)] public short _char;
+    [FieldOffset(0)] public short _short;
+    [FieldOffset(0)] public int _int;
+    [FieldOffset(0)] public long _long;
+    [FieldOffset(0)] public float _float;
+    [FieldOffset(0)] public double _double;
+    [FieldOffset(0)] public JniClass _clazz;
+    [FieldOffset(0)] public JniObject _object;
+    [FieldOffset(0)] public JniThrowable _exception;
 }

@@ -1,39 +1,24 @@
-﻿using static Simple.JNI.JNIEnv;
+﻿namespace Simple.JNI;
 
-namespace Simple.JNI;
-
-public unsafe partial class JavaVM : IDisposable
+public unsafe sealed partial class JavaVM : IDisposable
 {
-    [ThreadStatic]
-    private static JNIEnv? env;
-
-    public JNIEnv Env
-    {
-        get
-        {
-            if (env == null)
-            {
-                JNIEnvNative* envPtr;
-                // TODO test me on new thread
-                functions.AttachCurrentThread(native, &envPtr, null);
-                env = new JNIEnv(envPtr, this);
-            }
-            return env;
-        }
-        internal set { env = value; }
-    }
+    internal static JavaVM? instance = null;
 
     public JavaVM()
     {
         CreateJavaVM(out native, out var jniEnvNative);
         functions = *(*native).functions;
-        env = new JNIEnv(jniEnvNative, this);
+        JNIEnv.Current = new JNIEnv(jniEnvNative, this);
+        if (instance == null)
+        {
+            instance = this;
+        }
     }
 
     #region disposable
     private bool disposedValue;
 
-    protected virtual void Dispose(bool disposing)
+    private void Dispose(bool disposing)
     {
         if (!disposedValue)
         {

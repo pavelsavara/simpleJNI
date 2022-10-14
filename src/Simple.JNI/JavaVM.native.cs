@@ -7,7 +7,7 @@ namespace Simple.JNI;
 
 public unsafe partial class JavaVM
 {
-    private readonly JavaVMFunctions functions;
+    internal readonly JavaVMFunctions functions;
     private readonly JavaVMNative* native;
 
     [StructLayout(LayoutKind.Sequential, Size = 4), NativeCppClass]

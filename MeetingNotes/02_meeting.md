@@ -24,6 +24,7 @@
     * when working with java objects in .net, I need to use `GCHandle` to keep objects alive - I wanna use strong not pinned mode - I will always work with the java object via handle, I don't mind that the .net pointer gets invalidated (via CG eg during the heap defragmentation)
 * **How to get java metadata (reflection) to .Net source generator so that it can generate proxies and wrappers**?
   * xamarin java interop has .java file parser  - could it be used? - to extract metadata from user written .java files
+      * https://github.com/xamarin/java.interop/tree/main/src/Xamarin.Android.Tools.Bytecode and https://github.com/javaparser/javaparser for parameter names I think
   * I also need to generate proxies for library methods - I won't have access to their source code (.java)
   * `.jar` - zip file, contains `.class` files and binary files for library methods - to get metadata for library methods.  
     * problem - **does not contain names of methods parameters** - unfortunate, because I wanna generate user friendly API. Problem can probably be bypassed somehow. How?
@@ -34,13 +35,14 @@
   * but no need to address the issue of cycles between two heaps - way too complex, probably impossible to solve efficiently. GCs are complex and carefully optimized. Strategies of java and .net CGs are not compatible
 * Generics - would be nice to support generic collections but:
   *  java and .net type systems are not compatible when it comes to generics - **type constraints** work differently?
-  * java forgets type information for generics in runtime (.net does not and needs the type info)
-* .dll hell and java class loadres
+  * java forgets type information for generics in runtime (.net does not and needs the type info). See "type erasure"
+* .dll hell and java class loaders
   * mapping between class and its implementation if done by a class name
-  * java class loader reads `.class` files and carries out the mapping between class and implementation, then it loads the implementation to JVM
+  * java class loader reads `.class` files and carries out the mapping between class name and implementation, then it loads the implementation to JVM
     * there can exists multiple `.java` files for one class name - alternative implementations
   * Multiple components in one project may depend each on a different version of the same package - how to deal with a necessity to have two incompatible implementations of the same class in the project?
     * java uses sub-loader for each project to provide projects with appropriate versions of their dependencies 
   * The problem is - we use `Jni` to create instances of java objects and to find method implementations. Jni gets a type and method information from a class  loader. if there are multiple class subloaders in the project, how do we know, which one will provide data about the version of the class which the caller expects? We can easily get a different implementation of the same "interface".
-* It generally does not make that much sense to work with objects when doing interop between languages. OOP tends to invoke a huge amount of methods to carry out simple task. Overhead of method invocation via interop is not trivial (incomparably larger than the overhead of normal method invocation). But when enabling the interop between two object oriented languages such as C# and java, support for objects must be implemented, otherwise interop does not make sense. 
+* It generally does not make that much sense to work with objects when doing interop between languages. OOP tends to invoke a huge amount of methods to carry out simple task - "chatty interaction". Overhead of method invocation via interop is not trivial (incomparably larger than the overhead of normal method invocation). But when enabling the interop between two object oriented languages such as C# and java, support for objects must be implemented, otherwise interop usefulness is limited. 
+   * as stretch goal it would be useful to measure interop overhead for different call signatures and eventually optimize it
 
